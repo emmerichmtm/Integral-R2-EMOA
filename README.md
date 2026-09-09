@@ -40,11 +40,30 @@ python analyze_results.py
 
 - `integral_r2.py` — exact 2D/3D deletion losses, including ideal-boundary `+inf` handling.
 - `ir2_emoa.py` — IR2-EMOA, finite-weight R2-EMOA comparator, and SMS-style comparator.
-- `benchmarks.py` — DTLZ1/2/4.
+- `benchmarks.py` — ZDT1/2/3 and DTLZ1/2/4/7, including exact componentwise ideal points.
 - `metrics.py` — Delta_p and convergence.
 - `run_experiments.py` — reproducible pilot experiment runner.
 - `analyze_results.py` — median/IQR summary.
-- `results/` — raw and summarized pilot results.
+- `make_single_shot_figures.py` — six reproducible 2D IR2-EMOA single shots using the exact ideal point.
+- `figures/` — PNG single-shot plots for ZDT1/2/3 and DTLZ1/2/7.
+- `results/` — raw/summarized pilot results and exact-ideal single-shot objective sets.
+
+
+## Exact-ideal single-shot figures
+
+The six checked-in 2D single shots use the **exact componentwise ideal point**; no strict-dominance margin is added.  In particular,
+
+- ZDT1, ZDT2, DTLZ1 and DTLZ2 use `z*=(0,0)`,
+- ZDT3 uses `z*=(0,-0.7733690123266405)`, and
+- DTLZ7 uses `z*=(0,2.3070043655015775)`.
+
+The latter two values are the true componentwise objective infima.  They are not replaced by zero and are not shifted by epsilon.  If an approximation point attains an ideal coordinate exactly, the corresponding zero loss is mapped to reciprocal `+inf` by `integral_r2.py`.
+
+Reproduce the figures with:
+
+```bash
+python make_single_shot_figures.py --population 100 --evaluations 10000 --seed 2027
+```
 
 ## Status
 

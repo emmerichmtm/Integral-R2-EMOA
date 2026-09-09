@@ -24,3 +24,18 @@ Settings: DTLZ1 and DTLZ2; 2 and 3 objectives; population 30; 500 function evalu
 The pilot is only large enough to validate code paths and data handling. DTLZ2 shows comparable 2D behavior among the three methods and a better pilot Delta_p for SMS-EMOA in 3D. DTLZ1 remains far from convergence and highly variable at 500 evaluations; no substantive algorithmic conclusion should be drawn from those rows.
 
 The main experimental campaign should therefore use a much larger evaluation budget and at least the planned 30 independent runs before statistical testing.
+
+## Exact-ideal 2D single shots
+
+The following deterministic single shots were rerun after removing the old strict-ideal requirement.  Settings are population 100, 10,000 evaluations, and seed 2027.  The exact ideal point is passed directly to IR2-EMOA.
+
+| Problem | Exact ideal point | Delta_p | Convergence | Final nondominated size |
+|---|---|---:|---:|---:|
+| ZDT1 | (0, 0) | 0.008408 | 0.006272 | 100 |
+| ZDT2 | (0, 0) | 0.011097 | 0.007000 | 100 |
+| ZDT3 | (0, -0.7733690123) | 0.098782 | 0.002498 | 100 |
+| DTLZ1 | (0, 0) | 0.022007 | 0.021915 | 100 |
+| DTLZ2 | (0, 0) | 0.009135 | 0.000072 | 100 |
+| DTLZ7 | (0, 2.3070043655) | 0.007219 | 0.001557 | 100 |
+
+These are illustrative single runs, not inferential results.  For ZDT3 and DTLZ7 the exact ideal point is componentwise and is not itself generally feasible.  The PNGs are in `figures/`; raw final objective vectors and metadata are in `results/single_shot_exact_ideal/`.

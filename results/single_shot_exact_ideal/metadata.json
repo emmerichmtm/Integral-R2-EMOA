@@ -1,0 +1,98 @@
+[
+  {
+    "problem": "ZDT1",
+    "objectives": 2,
+    "population": 100,
+    "evaluations": 10000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      0.0
+    ],
+    "nondominated_size": 100,
+    "delta_p": 0.008407749523399857,
+    "convergence": 0.006271634707970827,
+    "figure": "figures/single_shot_zdt1_exact_ideal.png",
+    "objectives_csv": "results/zdt1_ir2_seed2027.csv"
+  },
+  {
+    "problem": "ZDT2",
+    "objectives": 2,
+    "population": 100,
+    "evaluations": 10000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      0.0
+    ],
+    "nondominated_size": 100,
+    "delta_p": 0.011097433864987086,
+    "convergence": 0.007000379999445358,
+    "figure": "figures/single_shot_zdt2_exact_ideal.png",
+    "objectives_csv": "results/zdt2_ir2_seed2027.csv"
+  },
+  {
+    "problem": "ZDT3",
+    "objectives": 2,
+    "population": 100,
+    "evaluations": 10000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      -0.7733690123266405
+    ],
+    "nondominated_size": 100,
+    "delta_p": 0.09878214334445459,
+    "convergence": 0.002498200042455316,
+    "figure": "figures/single_shot_zdt3_exact_ideal.png",
+    "objectives_csv": "results/zdt3_ir2_seed2027.csv"
+  },
+  {
+    "problem": "DTLZ1",
+    "objectives": 2,
+    "population": 100,
+    "evaluations": 10000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      0.0
+    ],
+    "nondominated_size": 100,
+    "delta_p": 0.022006746657073445,
+    "convergence": 0.021915050375640854,
+    "figure": "figures/single_shot_dtlz1_exact_ideal.png",
+    "objectives_csv": "results/dtlz1_ir2_seed2027.csv"
+  },
+  {
+    "problem": "DTLZ2",
+    "objectives": 2,
+    "population": 100,
+    "evaluations": 10000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      0.0
+    ],
+    "nondominated_size": 100,
+    "delta_p": 0.009135459801021241,
+    "convergence": 7.239318332124583e-05,
+    "figure": "figures/single_shot_dtlz2_exact_ideal.png",
+    "objectives_csv": "results/dtlz2_ir2_seed2027.csv"
+  },
+  {
+    "problem": "DTLZ7",
+    "objectives": 2,
+    "population": 100,
+    "evaluations": 10000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      2.3070043655015775
+    ],
+    "nondominated_size": 100,
+    "delta_p": 0.007219038858584801,
+    "convergence": 0.0015569996581429753,
+    "figure": "figures/single_shot_dtlz7_exact_ideal.png",
+    "objectives_csv": "results/dtlz7_ir2_seed2027.csv"
+  }
+]

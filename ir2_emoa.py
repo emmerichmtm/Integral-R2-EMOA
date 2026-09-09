@@ -11,25 +11,25 @@ def dominates(a,b):
 
 
 def nondominated_sort(F):
-    n=len(F); S=[[] for _ in range(n)]; cnt=[0]*n; fronts=[[]]
-    for i in range(n):
-        for j in range(i+1,n):
-            if dominates(F[i],F[j]): S[i].append(j); cnt[j]+=1
-            elif dominates(F[j],F[i]): S[j].append(i); cnt[i]+=1
-    for i,c in enumerate(cnt):
-        if c==0: fronts[0].append(i)
-    k=0
-    while k < len(fronts) and fronts[k]:
-        nxt=[]
-        for i in fronts[k]:
-            for j in S[i]:
-                cnt[j]-=1
-                if cnt[j]==0: nxt.append(j)
-        if nxt: fronts.append(nxt)
-        k+=1
+    """Fast nondominated sorting for the small steady-state population.
+
+    The dominance matrix is vectorized; this avoids millions of tiny NumPy
+    calls from pairwise Python loops during long single-shot runs.
+    """
+    A=np.asarray(F,float); n=len(A)
+    le=np.all(A[:,None,:] <= A[None,:,:], axis=2)
+    lt=np.any(A[:,None,:] < A[None,:,:], axis=2)
+    dom=le & lt
+    cnt=dom.sum(axis=0).astype(int)
+    fronts=[]; current=np.flatnonzero(cnt==0).tolist()
+    assigned=np.zeros(n,dtype=bool)
+    while current:
+        fronts.append(current); assigned[current]=True
+        dec=dom[current].sum(axis=0).astype(int)
+        cnt-=dec
+        current=np.flatnonzero((cnt==0) & (~assigned)).tolist()
     rank=np.empty(n,dtype=int)
-    for r,fr in enumerate(fronts):
-        for i in fr: rank[i]=r
+    for r,fr in enumerate(fronts): rank[fr]=r
     return fronts,rank
 
 
@@ -152,10 +152,9 @@ def run(problem='DTLZ2', m=2, algorithm='ir2', pop_size=30, evaluations=1500, se
     X=(rng.random((pop_size,nv)) if initial_X is None else np.asarray(initial_X,float).copy())
     F=np.asarray([evaluate(problem,x,m) for x in X])
     weights=lattice_weights(m,101 if m==2 else 120)
-    while len(F) < 0: pass
     fe=pop_size
+    fronts,rank=nondominated_sort(F)
     while fe < evaluations:
-        fronts,rank=nondominated_sort(F)
         def tournament():
             a,b=rng.integers(0,pop_size,size=2)
             if rank[a] < rank[b]: return a
@@ -165,7 +164,7 @@ def run(problem='DTLZ2', m=2, algorithm='ir2', pop_size=30, evaluations=1500, se
         child=polynomial_mutation(sbx(X[p1],X[p2],rng),rng)
         fc=evaluate(problem,child,m); fe+=1
         X=np.vstack([X,child]); F=np.vstack([F,fc])
-        fronts,_=nondominated_sort(F); worst=fronts[-1]
+        fronts,rank_aug=nondominated_sort(F); worst=fronts[-1]
         if len(worst)==1:
             kill=worst[0]
         else:
@@ -178,6 +177,8 @@ def run(problem='DTLZ2', m=2, algorithm='ir2', pop_size=30, evaluations=1500, se
             local=min(range(len(worst)), key=lambda k:(c[k],worst[k]))
             kill=worst[local]
         X=np.delete(X,kill,axis=0); F=np.delete(F,kill,axis=0)
+        # Only the last front loses a point, so surviving ranks do not change.
+        rank=np.delete(rank_aug,kill)
     fronts,_=nondominated_sort(F)
     nd=fronts[0]
     return X[nd],F[nd]

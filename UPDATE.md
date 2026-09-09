@@ -22,3 +22,12 @@ git push
 ```
 
 The checked-in results are explicitly marked as pilot/software-verification results. Do not present them as the final EMO 2027 benchmark.
+
+## Exact-ideal single-shot rerun
+
+- Added ZDT1, ZDT2, ZDT3 and DTLZ7 benchmark definitions.
+- `ideal()` now returns the exact componentwise benchmark ideal; no artificial strict-dominance offset is used.
+- ZDT3 uses `z*_2=-0.7733690123266405`; DTLZ7 (2D) uses `z*_2=2.3070043655015775`.
+- Repeated the six 2D IR2-EMOA single shots for ZDT1/2/3 and DTLZ1/2/7 with population 100, 10,000 evaluations, seed 2027.
+- Added the six PNGs and raw final objective vectors.
+- Vectorized nondominated sorting and reused surviving ranks after deletion; this changes runtime only, not the steady-state selection rule.
