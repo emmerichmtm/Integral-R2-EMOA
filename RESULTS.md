@@ -25,17 +25,21 @@ The pilot is only large enough to validate code paths and data handling. DTLZ2 s
 
 The main experimental campaign should therefore use a much larger evaluation budget and at least the planned 30 independent runs before statistical testing.
 
-## Exact-ideal 2D single shots
+## Exact-ideal single shots (30,000 evaluations; DTLZ7 uses 60,000)
 
-The following deterministic single shots were rerun after removing the old strict-ideal requirement.  Settings are population 100, 10,000 evaluations, and seed 2027.  The exact ideal point is passed directly to IR2-EMOA.
+These deterministic single shots use population 60 and seed 2027. ZDT1/2/3, DTLZ1, and DTLZ2 use 30,000 function evaluations; DTLZ7 uses 60,000 to improve convergence. ZDT problems are 2-D and DTLZ problems are 3-D.
+All six final populations are fully nondominated (60 plotted points).
 
-| Problem | Exact ideal point | Delta_p | Convergence | Final nondominated size |
-|---|---|---:|---:|---:|
-| ZDT1 | (0, 0) | 0.008408 | 0.006272 | 100 |
-| ZDT2 | (0, 0) | 0.011097 | 0.007000 | 100 |
-| ZDT3 | (0, -0.7733690123) | 0.098782 | 0.002498 | 100 |
-| DTLZ1 | (0, 0) | 0.022007 | 0.021915 | 100 |
-| DTLZ2 | (0, 0) | 0.009135 | 0.000072 | 100 |
-| DTLZ7 | (0, 2.3070043655) | 0.007219 | 0.001557 | 100 |
+| Problem | m | Exact ideal point | Delta_p | Convergence | ND size |
+|---|---:|---|---:|---:|---:|
+| ZDT1 | 2 | (0, 0) | 0.009055 | 0.000022 | 60 |
+| ZDT2 | 2 | (0, 0) | 0.012200 | 0.000024 | 60 |
+| ZDT3 | 2 | (0, -0.7733690123) | 0.012431 | 0.000099 | 60 |
+| DTLZ1 | 3 | (0, 0, 0) | 0.026878 | 0.002895 | 60 |
+| DTLZ2 | 3 | (0, 0, 0) | 0.080594 | 0.007826 | 60 |
+| DTLZ7 | 3 | (0, 0, 2.6140087310) | 0.181306 | 0.008219 | 60 |
 
-These are illustrative single runs, not inferential results.  For ZDT3 and DTLZ7 the exact ideal point is componentwise and is not itself generally feasible.  The PNGs are in `figures/`; raw final objective vectors and metadata are in `results/single_shot_exact_ideal/`.
+The DTLZ7 reference front is the true disconnected four-patch front, not the
+whole `g=1` surface. The exact ideal above dominates all of it. Raw final
+objective vectors, per-case metadata, and combined metadata are in
+`results/single_shot_exact_ideal_30000/`.

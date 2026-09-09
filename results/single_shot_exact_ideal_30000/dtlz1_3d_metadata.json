@@ -1,0 +1,23 @@
+{
+  "problem": "DTLZ1",
+  "objectives": 3,
+  "population": 60,
+  "evaluations": 30000,
+  "seed": 2027,
+  "ideal": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "nondominated_size": 60,
+  "delta_p": 0.026877839105067386,
+  "convergence": 0.0028945030544484988,
+  "runtime_s": 120.172777924,
+  "figure": "figures/single_shot_dtlz1_3d_exact_ideal_30000evals.png",
+  "objectives_csv": "results/single_shot_exact_ideal_30000/dtlz1_3d_ir2_seed2027.csv",
+  "view": {
+    "projection": "persp",
+    "elevation": 30.0,
+    "azimuth": -60.0
+  }
+}

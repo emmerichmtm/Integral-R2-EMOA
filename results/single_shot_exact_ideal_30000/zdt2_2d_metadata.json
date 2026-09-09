@@ -1,0 +1,18 @@
+{
+  "problem": "ZDT2",
+  "objectives": 2,
+  "population": 60,
+  "evaluations": 30000,
+  "seed": 2027,
+  "ideal": [
+    0.0,
+    0.0
+  ],
+  "nondominated_size": 60,
+  "delta_p": 0.012199543262062528,
+  "convergence": 2.3640315725555465e-05,
+  "runtime_s": 35.88561712599949,
+  "figure": "figures/single_shot_zdt2_2d_exact_ideal_30000evals.png",
+  "objectives_csv": "results/single_shot_exact_ideal_30000/zdt2_2d_ir2_seed2027.csv",
+  "view": null
+}

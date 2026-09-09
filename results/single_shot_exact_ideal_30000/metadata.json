@@ -1,0 +1,125 @@
+[
+  {
+    "problem": "ZDT1",
+    "objectives": 2,
+    "population": 60,
+    "evaluations": 30000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      0.0
+    ],
+    "nondominated_size": 60,
+    "delta_p": 0.00905479344670934,
+    "convergence": 2.2208729278249428e-05,
+    "runtime_s": 43.58218006199968,
+    "figure": "figures/single_shot_zdt1_2d_exact_ideal_30000evals.png",
+    "objectives_csv": "results/single_shot_exact_ideal_30000/zdt1_2d_ir2_seed2027.csv",
+    "view": null
+  },
+  {
+    "problem": "ZDT2",
+    "objectives": 2,
+    "population": 60,
+    "evaluations": 30000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      0.0
+    ],
+    "nondominated_size": 60,
+    "delta_p": 0.012199543262062528,
+    "convergence": 2.3640315725555465e-05,
+    "runtime_s": 35.88561712599949,
+    "figure": "figures/single_shot_zdt2_2d_exact_ideal_30000evals.png",
+    "objectives_csv": "results/single_shot_exact_ideal_30000/zdt2_2d_ir2_seed2027.csv",
+    "view": null
+  },
+  {
+    "problem": "ZDT3",
+    "objectives": 2,
+    "population": 60,
+    "evaluations": 30000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      -0.7733690123266405
+    ],
+    "nondominated_size": 60,
+    "delta_p": 0.012431106267241815,
+    "convergence": 9.887421906074847e-05,
+    "runtime_s": 30.78891688300064,
+    "figure": "figures/single_shot_zdt3_2d_exact_ideal_30000evals.png",
+    "objectives_csv": "results/single_shot_exact_ideal_30000/zdt3_2d_ir2_seed2027.csv",
+    "view": null
+  },
+  {
+    "problem": "DTLZ1",
+    "objectives": 3,
+    "population": 60,
+    "evaluations": 30000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "nondominated_size": 60,
+    "delta_p": 0.026877839105067386,
+    "convergence": 0.0028945030544484988,
+    "runtime_s": 120.172777924,
+    "figure": "figures/single_shot_dtlz1_3d_exact_ideal_30000evals.png",
+    "objectives_csv": "results/single_shot_exact_ideal_30000/dtlz1_3d_ir2_seed2027.csv",
+    "view": {
+      "projection": "persp",
+      "elevation": 30.0,
+      "azimuth": -60.0
+    }
+  },
+  {
+    "problem": "DTLZ2",
+    "objectives": 3,
+    "population": 60,
+    "evaluations": 30000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "nondominated_size": 60,
+    "delta_p": 0.08059356687407568,
+    "convergence": 0.007825671749719024,
+    "runtime_s": 213.58684242300023,
+    "figure": "figures/single_shot_dtlz2_3d_exact_ideal_30000evals.png",
+    "objectives_csv": "results/single_shot_exact_ideal_30000/dtlz2_3d_ir2_seed2027.csv",
+    "view": {
+      "projection": "persp",
+      "elevation": 30.0,
+      "azimuth": -60.0
+    }
+  },
+  {
+    "problem": "DTLZ7",
+    "objectives": 3,
+    "population": 60,
+    "evaluations": 60000,
+    "seed": 2027,
+    "ideal": [
+      0.0,
+      0.0,
+      2.614008731003155
+    ],
+    "nondominated_size": 60,
+    "delta_p": 0.1813060431302294,
+    "convergence": 0.008218516989197495,
+    "runtime_s": 246.13045388,
+    "figure": "figures/single_shot_dtlz7_3d_exact_ideal_60000evals.png",
+    "objectives_csv": "results/single_shot_exact_ideal_30000/dtlz7_3d_ir2_seed2027.csv",
+    "view": {
+      "projection": "persp",
+      "elevation": 30.0,
+      "azimuth": -60.0
+    }
+  }
+]

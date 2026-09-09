@@ -39,16 +39,32 @@ def _zdt3_ideal_f2() -> float:
     return _zdt3_f2_pf(xstar)
 
 
-def _dtlz7_qmax() -> float:
-    # q(x)=x(1+sin(3*pi*x)); its global maximum on [0,1] is in (5/6,0.9).
-    def d(x: float) -> float:
-        return 1.0 + math.sin(3.0*math.pi*x) + 3.0*math.pi*x*math.cos(3.0*math.pi*x)
-    xstar = _bisect_root(d, 5.0/6.0, 0.9)
-    return xstar*(1.0 + math.sin(3.0*math.pi*xstar))
+def _dtlz7_q(x: float) -> float:
+    return x*(1.0 + math.sin(3.0*math.pi*x))
+
+
+def _dtlz7_dq(x: float) -> float:
+    return 1.0 + math.sin(3.0*math.pi*x) + 3.0*math.pi*x*math.cos(3.0*math.pi*x)
+
+
+def _dtlz7_pf_intervals():
+    """Return the two 1-D record intervals that generate the DTLZ7 PF.
+
+    For g=1 the last objective is additive in q(x)=x(1+sin(3*pi*x)).
+    A coordinate value is Pareto-relevant exactly while q is a new prefix
+    maximum.  This gives [0,a] U [b,c], where a and c are the first and
+    last local maxima and q(b)=q(a) on the rising branch after x=1/2.
+    """
+    a = _bisect_root(_dtlz7_dq, 0.20, 0.30)
+    c = _bisect_root(_dtlz7_dq, 5.0/6.0, 0.90)
+    qa = _dtlz7_q(a)
+    b = _bisect_root(lambda x: _dtlz7_q(x)-qa, 0.50, c)
+    return a,b,c
 
 
 ZDT3_IDEAL_F2 = _zdt3_ideal_f2()
-DTLZ7_QMAX = _dtlz7_qmax()
+DTLZ7_A, DTLZ7_B, DTLZ7_C = _dtlz7_pf_intervals()
+DTLZ7_QMAX = _dtlz7_q(DTLZ7_C)
 
 
 def n_var(problem: str, m: int) -> int:
@@ -156,8 +172,11 @@ def pareto_reference(problem: str, m: int, n: int=2001) -> np.ndarray:
         if p=='DTLZ1': return np.c_[0.5*t,0.5*(1-t)]
         if p in ('DTLZ2','DTLZ4'): return np.c_[np.cos(t*math.pi/2),np.sin(t*math.pi/2)]
         if p=='DTLZ7':
-            raw=np.c_[t, 4.0-t*(1.0+np.sin(3.0*math.pi*t))]
-            return _nondominated_rows(raw)
+            n1=max(2,n//2)
+            n2=max(2,n-n1)
+            t=np.r_[np.linspace(0.0,DTLZ7_A,n1,endpoint=True),
+                    np.linspace(DTLZ7_B,DTLZ7_C,n2,endpoint=True)]
+            return np.c_[t, 4.0-t*(1.0+np.sin(3.0*math.pi*t))]
     if m==3:
         # quasi-uniform simplex lattice for DTLZ1; spherical points for DTLZ2/4
         h=max(10,int(math.sqrt(2*n)))
@@ -175,13 +194,16 @@ def pareto_reference(problem: str, m: int, n: int=2001) -> np.ndarray:
                     v/=np.linalg.norm(v)
                     pts.append(tuple(v))
         elif p=='DTLZ7':
-            g = max(40, int(math.sqrt(n)))
-            for i in range(g+1):
-                f1 = i/g
-                for j in range(g+1):
-                    f2 = j/g
-                    f3 = 6.0 - f1*(1.0 + math.sin(3.0*math.pi*f1)) - f2*(1.0 + math.sin(3.0*math.pi*f2))
-                    pts.append((f1, f2, f3))
+            # Four disconnected Pareto patches = Cartesian product of the
+            # two Pareto-relevant intervals [0,a] and [b,c].
+            per=max(8,int(math.ceil(math.sqrt(max(4,n)/4.0))))
+            intervals=((0.0,DTLZ7_A),(DTLZ7_B,DTLZ7_C))
+            for lo1,hi1 in intervals:
+                for lo2,hi2 in intervals:
+                    for f1 in np.linspace(lo1,hi1,per,endpoint=True):
+                        for f2 in np.linspace(lo2,hi2,per,endpoint=True):
+                            f3 = 6.0 - _dtlz7_q(float(f1)) - _dtlz7_q(float(f2))
+                            pts.append((float(f1),float(f2),float(f3)))
         else: raise ValueError((problem,m))
         return np.asarray(pts,float)
     raise ValueError((problem,m))

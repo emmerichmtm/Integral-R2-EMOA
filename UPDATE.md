@@ -31,3 +31,8 @@ The checked-in results are explicitly marked as pilot/software-verification resu
 - Repeated the six 2D IR2-EMOA single shots for ZDT1/2/3 and DTLZ1/2/7 with population 100, 10,000 evaluations, seed 2027.
 - Added the six PNGs and raw final objective vectors.
 - Vectorized nondominated sorting and reused surviving ranks after deletion; this changes runtime only, not the steady-state selection rule.
+
+- Replotted DTLZ1 3D with the true Pareto background drawn first so the approximation points stay in the foreground.
+- Increased the DTLZ7 3D single-shot budget to 60,000 evaluations and updated the recorded figure and metadata accordingly.
+
+- Added a six-plot gallery to the LaTeX manuscript for the current exact-ideal single-shot figures (ZDT1, ZDT2, ZDT3, DTLZ1, DTLZ2, DTLZ7).

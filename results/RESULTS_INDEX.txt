@@ -1,14 +1,25 @@
 IR2-EMOA results index
 ======================
 
-Existing results already in the repository:
+Current 30,000-evaluation single-shot study
+------------------------------------------
+- results/single_shot_exact_ideal_30000/
+  Population 60, seed 2027; ZDT1/2/3 in 2D and DTLZ1/2/7 in 3D.
+- figures/single_shot_*_30000evals.png
+  Current publication-style figures.
+
+Earlier results retained for provenance
+--------------------------------------
 - results/pilot_raw.csv
 - results/pilot_summary.csv
-- results/single_shot_exact_ideal/ (older 2D exact-ideal single shots)
-
-New reproducible 60-point exact-ideal single-shot results:
+- results/single_shot_exact_ideal/
 - results/single_shot_exact_ideal_60/
-- figures/single_shot_*_exact_ideal_60pts.png
+- figures/archive_previous/
 
-Reproduce with:
-    python make_single_shot_figures.py --population 60 --evaluations 10000 --seed 2027
+Reproduce current figures
+-------------------------
+    python -m unittest discover -s tests -v
+    python make_single_shot_figures.py --population 60 --evaluations 30000 --seed 2027
+
+Optional parallel execution:
+    python make_single_shot_figures.py --population 60 --evaluations 30000 --seed 2027 --jobs 6
