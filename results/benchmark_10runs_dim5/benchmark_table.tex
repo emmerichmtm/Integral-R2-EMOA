@@ -1,0 +1,36 @@
+\begin{table}[t]
+\centering
+\caption{Ten-run benchmark results as median $\pm$ sample standard deviation with five decision variables, population size $50$, and $10{,}000$ evaluations. Smaller is better for IR2 and $\Delta_p$; larger is better for HV. Exact paired seeds and all run-wise values are provided in the repository.}
+\label{tab:benchmark10}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{llccc}
+\toprule
+Problem & Algorithm & IR2 $\downarrow$ & HV $\uparrow$ & $\Delta_p\downarrow$\\
+\midrule
+ZDT1 & IR2-EMOA & $\mathbf{0.133342\pm4.22e-06}$ & $0.865733\pm0.000265$ & $0.011116\pm0.000522$\\
+ & finite R2-EMOA & $0.133398\pm1.43e-05$ & $0.865033\pm0.000317$ & $0.012377\pm0.000617$\\
+ & SMS-EMOA & $0.133517\pm2.56e-05$ & $\mathbf{0.867438\pm2.12e-05}$ & $\mathbf{0.008516\pm8.45e-05}$\\
+\addlinespace[1pt]
+ZDT2 & IR2-EMOA & $\mathbf{0.198800\pm3.49e-06}$ & $0.533803\pm0.000132$ & $0.014508\pm0.000656$\\
+ & finite R2-EMOA & $0.198893\pm1.24e-05$ & $0.533085\pm0.000261$ & $0.015656\pm0.001247$\\
+ & SMS-EMOA & $0.198820\pm8.92e-06$ & $\mathbf{0.534296\pm3.00e-05}$ & $\mathbf{0.011113\pm0.000343}$\\
+\addlinespace[1pt]
+ZDT3 & IR2-EMOA & $\mathbf{0.196016\pm0.013668}$ & $1.092857\pm0.009866$ & $0.015049\pm0.025889$\\
+ & finite R2-EMOA & $0.196056\pm0.013672$ & $1.092395\pm0.009974$ & $0.016551\pm0.027011$\\
+ & SMS-EMOA & $0.196108\pm1.87e-05$ & $\mathbf{1.094366\pm1.77e-05}$ & $\mathbf{0.012321\pm0.000426}$\\
+\addlinespace[1pt]
+DTLZ1 & IR2-EMOA & $\mathbf{0.033365\pm0.000179}$ & $0.133053\pm0.000623$ & $\mathbf{0.029741\pm0.000326}$\\
+ & finite R2-EMOA & $0.034492\pm0.000679$ & $0.128569\pm0.000860$ & $0.085245\pm0.063017$\\
+ & SMS-EMOA & $0.033834\pm0.000207$ & $\mathbf{0.137431\pm0.000233}$ & $0.031334\pm1.261365$\\
+\addlinespace[1pt]
+DTLZ2 & IR2-EMOA & $\mathbf{0.094891\pm6.70e-06}$ & $0.726085\pm0.000636$ & $0.090076\pm0.001392$\\
+ & finite R2-EMOA & $0.095394\pm4.63e-05$ & $0.692045\pm0.001923$ & $\mathbf{0.083892\pm0.001283}$\\
+ & SMS-EMOA & $0.094952\pm1.70e-05$ & $\mathbf{0.735302\pm0.000119}$ & $0.117048\pm0.001852$\\
+\addlinespace[1pt]
+DTLZ7 & IR2-EMOA & $0.458422\pm0.182414$ & $1.172993\pm0.106857$ & $0.520688\pm0.261109$\\
+ & finite R2-EMOA & $\mathbf{0.229395\pm0.200067}$ & $1.129139\pm0.062432$ & $0.246245\pm0.267430$\\
+ & SMS-EMOA & $0.233253\pm0.268388$ & $\mathbf{1.409654\pm0.211124}$ & $\mathbf{0.131598\pm0.428380}$\\
+\bottomrule
+\end{tabular}
+\end{table}

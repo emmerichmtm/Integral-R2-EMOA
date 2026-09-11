@@ -1,0 +1,55 @@
+{
+  "problems": [
+    {
+      "problem": "ZDT1",
+      "objectives": 2
+    },
+    {
+      "problem": "ZDT2",
+      "objectives": 2
+    },
+    {
+      "problem": "ZDT3",
+      "objectives": 2
+    },
+    {
+      "problem": "DTLZ1",
+      "objectives": 3
+    },
+    {
+      "problem": "DTLZ2",
+      "objectives": 3
+    },
+    {
+      "problem": "DTLZ7",
+      "objectives": 3
+    }
+  ],
+  "algorithms": [
+    "IR2-EMOA",
+    "finite R2-EMOA",
+    "SMS-EMOA"
+  ],
+  "runs": 10,
+  "evaluations": 10000,
+  "population": 50,
+  "decision_dimension": 5,
+  "reference_points": 10000,
+  "paired_common_start": true,
+  "finite_r2_weights": {
+    "2d": 101,
+    "3d": 120
+  },
+  "performance_indicators": [
+    "Integral R2",
+    "hypervolume",
+    "Delta_p (p=2)"
+  ],
+  "hv_reference_rule": "sampled PF nadir + 0.1*(sampled PF nadir - exact ideal)",
+  "integral_r2_source": "https://github.com/emmerichmtm/IntegralR2ByPerspectiveMapping",
+  "algorithm_source": "https://github.com/emmerichmtm/Integral-R2-EMOA",
+  "seed_file": "seeds.csv",
+  "variation_seeds_saved_explicitly": true,
+  "initialization_seed_rule": "variation_seed + 17",
+  "seed_pairing": "Within each problem/run, the three algorithms use the same variation seed and the same initial population."
+}

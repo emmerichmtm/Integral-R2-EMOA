@@ -1,0 +1,74 @@
+[
+  {
+    "problem": "ZDT3",
+    "objectives": 2,
+    "decision_dimension": 5,
+    "algorithm": "ir2",
+    "algorithm_label": "IR2-EMOA",
+    "run": 8,
+    "seed": 3328342,
+    "evaluations": 10000,
+    "population": 50,
+    "nondominated_size": 50,
+    "integral_r2": 0.1960134164735838,
+    "hypervolume": 1.0928683599415419,
+    "delta_p": 0.014755475930789186,
+    "ideal": [
+      0.0,
+      -0.7733690123266405
+    ],
+    "hv_reference": [
+      0.9370090312181477,
+      1.177336901232664
+    ],
+    "finite_r2_weights": null
+  },
+  {
+    "problem": "ZDT3",
+    "objectives": 2,
+    "decision_dimension": 5,
+    "algorithm": "r2",
+    "algorithm_label": "finite R2-EMOA",
+    "run": 8,
+    "seed": 3328342,
+    "evaluations": 10000,
+    "population": 50,
+    "nondominated_size": 50,
+    "integral_r2": 0.19605547240530422,
+    "hypervolume": 1.092451594138576,
+    "delta_p": 0.016419093989500425,
+    "ideal": [
+      0.0,
+      -0.7733690123266405
+    ],
+    "hv_reference": [
+      0.9370090312181477,
+      1.177336901232664
+    ],
+    "finite_r2_weights": 101
+  },
+  {
+    "problem": "ZDT3",
+    "objectives": 2,
+    "decision_dimension": 5,
+    "algorithm": "sms",
+    "algorithm_label": "SMS-EMOA",
+    "run": 8,
+    "seed": 3328342,
+    "evaluations": 10000,
+    "population": 50,
+    "nondominated_size": 50,
+    "integral_r2": 0.19612547962650578,
+    "hypervolume": 1.0943303716760922,
+    "delta_p": 0.01238305818633222,
+    "ideal": [
+      0.0,
+      -0.7733690123266405
+    ],
+    "hv_reference": [
+      0.9370090312181477,
+      1.177336901232664
+    ],
+    "finite_r2_weights": null
+  }
+]

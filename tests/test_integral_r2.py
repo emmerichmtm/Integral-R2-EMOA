@@ -9,6 +9,6 @@ class TestIR2Boundary(unittest.TestCase):
         self.assertEqual(weighted_box_integral_3d((math.inf,math.inf,0,1,0,1)),0.0)
     def test_boundary_contrib(self):
         c=integral_r2_contributions_3d([(0,2,2),(2,0,2)],(0,0,0))
-        # unnormalised simplex integral -> half of 2/9
-        self.assertAlmostEqual(c[0],1/9,12); self.assertAlmostEqual(c[1],1/9,12)
+        # normalized uniform simplex measure gives 2/9 for each contribution
+        self.assertAlmostEqual(c[0],2/9,12); self.assertAlmostEqual(c[1],2/9,12)
 if __name__=='__main__': unittest.main()
