@@ -204,7 +204,8 @@ def integral_r2_contributions_3d(points: Sequence[Sequence[float]], ideal: Seque
     if n == 1: return [math.inf]
     out=[0.0]*n
     for c in exclusive_cells_3d(points,ideal):
-        out[c.owner]+=weighted_box_integral_3d(c.box)
+        # Normalized uniform measure on the 2-simplex contributes (3-1)! = 2.
+        out[c.owner]+=2.0*weighted_box_integral_3d(c.box)
     return [0.0 if abs(v)<1e-15 else v for v in out]
 
 

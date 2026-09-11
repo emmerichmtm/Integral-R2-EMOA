@@ -147,9 +147,11 @@ def polynomial_mutation(x,rng,eta=20.0,pm=None):
     return y
 
 
-def run(problem='DTLZ2', m=2, algorithm='ir2', pop_size=30, evaluations=1500, seed=1, initial_X=None):
-    rng=np.random.default_rng(seed); nv=n_var(problem,m); z=ideal(problem,m)
+def run(problem='DTLZ2', m=2, algorithm='ir2', pop_size=30, evaluations=1500, seed=1, initial_X=None, n_variables=None):
+    rng=np.random.default_rng(seed); nv=(n_var(problem,m) if n_variables is None else int(n_variables)); z=ideal(problem,m)
     X=(rng.random((pop_size,nv)) if initial_X is None else np.asarray(initial_X,float).copy())
+    if X.shape != (pop_size,nv):
+        raise ValueError(f'initial_X has shape {X.shape}, expected {(pop_size,nv)}')
     F=np.asarray([evaluate(problem,x,m) for x in X])
     weights=lattice_weights(m,101 if m==2 else 120)
     fe=pop_size

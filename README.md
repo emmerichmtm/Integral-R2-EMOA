@@ -1,6 +1,6 @@
 # IR2-EMOA
 
-Reference implementation and pilot experiments for **IR2-EMOA: An Evolutionary Multiobjective Optimization Algorithm Based on the Integral R2 Indicator**.
+Reference implementation and reproducible experiments for **IR2-EMOA: Multiobjective Selection Based on the Integral R2 Indicator**.
 
 The repository is intentionally focused on two and three objectives and on the steady-state indicator-based comparison with SMS-EMOA and finite-weight R2-EMOA.
 
@@ -16,7 +16,7 @@ The code uses an actual IEEE `+inf`; it never substitutes epsilon or a large fin
 
 ## Algorithms
 
-- `ir2`: proposed Integral R2 EMOA, steady-state, nondominated sorting, least Integral R2 deletion loss in the worst front.
+- `ir2`: proposed Integral R2 EMOA, steady-state, nondominated sorting, least IR2 contribution in the worst front.
 - `r2`: finite-weight R2-EMOA in the same steady-state architecture, using a simplex lattice of weight vectors.
 - `sms`: SMS-style steady-state deletion by hypervolume contribution. For the pilot code, the worst front is affinely normalized and a dystopian reference `(1.1,...,1.1)` is used.
 
@@ -26,7 +26,7 @@ Variation is SBX (`pc=0.9`, `eta_c=15`) plus polynomial mutation (`pm=1/n`, `eta
 
 The checked-in pilot uses DTLZ1 and DTLZ2 in 2D and 3D, 3 common-start runs, population 30, and 500 evaluations. This is a software/regression study, **not yet the final EMO 2027 experiment**. Publication runs should use the frozen larger budget and number of repetitions.
 
-Primary quality measures are `Delta_p` (averaged Hausdorff distance, p=2) and mean convergence distance to a dense known Pareto-front reference set. Hypervolume is not used as a performance metric.
+The current benchmark assesses final approximation sets by exact Integral R2, hypervolume, and `Delta_p` (p=2).
 
 Reproduce:
 
@@ -43,11 +43,27 @@ python analyze_results.py
 - `benchmarks.py` — ZDT1/2/3 and DTLZ1/2/4/7, including exact componentwise ideal points.
 - `metrics.py` — Delta_p and convergence.
 - `run_experiments.py` — reproducible pilot experiment runner.
+- `benchmark_10runs_dim5.py` — ten-run, six-problem comparison of IR2-EMOA, finite R2-EMOA, and SMS-EMOA.
+- `performance_indicators.py` — exact Integral R2 (perspective mapping), exact 2D/3D HV, and Delta_p assessment.
+- `make_benchmark_table.py` — compact LaTeX table generator from benchmark summaries.
 - `analyze_results.py` — median/IQR summary.
 - `make_single_shot_figures.py` — reproducible 2-D ZDT and 3-D DTLZ IR2-EMOA single shots using exact ideal points.
 - `figures/` — PNG single-shot plots for ZDT1/2/3 and DTLZ1/2/7.
 - `results/` — raw/summarized pilot results and exact-ideal single-shot objective sets.
 
+
+## Ten-run benchmark
+
+The controlled benchmark compares IR2-EMOA, finite-weight R2-EMOA, and SMS-EMOA on ZDT1/2/3 (2 objectives) and DTLZ1/2/7 (3 objectives). Each problem uses five decision variables, population size 50, 10,000 function evaluations, and ten paired/common-start runs. Finite R2 uses 101 weights in 2D and 120 simplex-lattice weights in 3D. Performance is measured by exact Integral R2, hypervolume with one fixed problem-level shifted-nadir reference point, and `Delta_p` against a deterministic 10,000-point Pareto-front reference set.
+
+Reproduce with:
+
+```bash
+python benchmark_10runs_dim5.py --runs 10 --evaluations 10000 --population 50 --dimension 5 --reference-points 10000 --jobs 5
+python make_benchmark_table.py
+```
+
+Outputs are written to `results/benchmark_10runs_dim5/`.
 
 ## Exact-ideal single-shot figures
 

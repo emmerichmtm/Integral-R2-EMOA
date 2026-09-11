@@ -36,3 +36,5 @@ The checked-in results are explicitly marked as pilot/software-verification resu
 - Increased the DTLZ7 3D single-shot budget to 60,000 evaluations and updated the recorded figure and metadata accordingly.
 
 - Added a six-plot gallery to the LaTeX manuscript for the current exact-ideal single-shot figures (ZDT1, ZDT2, ZDT3, DTLZ1, DTLZ2, DTLZ7).
+
+- Verified the complete 180-run benchmark, saved all paired variation/initialization seeds explicitly, and changed the manuscript benchmark table to median +/- sample standard deviation.

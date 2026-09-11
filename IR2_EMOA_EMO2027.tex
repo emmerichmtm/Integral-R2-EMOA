@@ -11,7 +11,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{xcolor}
-\usepackage{url}
+\usepackage{xurl}
 \usepackage{microtype}
 
 \newcommand{\IR}{\operatorname{IR2}}
@@ -22,7 +22,7 @@
 \newcommand{\W}{\mathcal{W}}
 \newcommand{\cIR}{C_{\IR}}
 
-\title{IR2-EMOA: An Evolutionary Multiobjective Optimization Algorithm Based on the Integral R2 Indicator}
+\title{IR2-EMOA: Multiobjective Selection Based on the Integral R2 Indicator}
 \titlerunning{IR2-EMOA}
 
 \author{Michael T. M. Emmerich\inst{1} \and
@@ -40,7 +40,7 @@ TU Dresden, Dresden, Germany\\
 \maketitle
 
 \begin{abstract}
-Indicator-based environmental selection is attractive because it reduces the quality of an approximation set to a scalar criterion that can be used directly in survival decisions. SMS-EMOA is a prominent steady-state example and removes the solution with the smallest hypervolume contribution from the worst nondominated front. Hypervolume, however, is defined relative to a dominated, or dystopian, reference point. In this paper we propose \emph{Integral R2 EMOA} (IR2-EMOA), a steady-state evolutionary multiobjective optimization algorithm that instead uses the exact Integral R2 indicator. Integral R2 integrates the lower envelope of weighted Tchebycheff losses over a continuous weight simplex and is naturally specified by an ideal or utopian point. Unlike the commonly used finite-weight approximation of R2, the integral formulation is Pareto compliant. We derive the deletion losses needed for environmental selection in two objectives and obtain the three-objective computation through the perspective mapping to weighted orthogonal-box contributions. The resulting algorithm retains the simple steady-state structure of SMS-EMOA while replacing a dystopian-reference-point indicator by an ideal-point-based indicator. The empirical study is restricted to two and three objectives and compares IR2-EMOA with SMS-EMOA and finite-weight R2-EMOA using the averaged Hausdorff distance and a convergence measure rather than hypervolume as performance criteria.
+Indicator-based environmental selection is attractive because it reduces the quality of an approximation set to a scalar criterion that can be used directly in survival decisions. SMS-EMOA is a prominent steady-state example and removes the solution with the smallest hypervolume contribution from the worst nondominated front. Hypervolume, however, is defined relative to a dominated, or dystopian, reference point. In this paper we propose \emph{Integral R2 EMOA} (IR2-EMOA), a steady-state evolutionary multiobjective optimization algorithm that instead uses the exact Integral R2 indicator. Integral R2 integrates the lower envelope of weighted Tchebycheff losses over a continuous weight simplex and is naturally specified by an ideal or utopian point. Unlike the commonly used finite-weight approximation of R2, the integral formulation is Pareto compliant. We use IR2 contributions for environmental selection. The bi-objective contribution formula is taken from the R2 v2 work of Sch\"apermeier and Kerschke; for three objectives we use perspective mapping to a hypervolume-analogue box decomposition and dimension sweep. This three-dimensional contribution computation is a supporting contribution rather than the main contribution of the paper. The resulting algorithm retains the simple steady-state structure of SMS-EMOA while replacing a dystopian-reference-point indicator by an ideal-point-based indicator. The empirical study is restricted to two and three objectives and assesses approximation sets by Integral R2, hypervolume, and the standard averaged Hausdorff distance $\Delta_p$.
 \keywords{Evolutionary multiobjective optimization \and indicator-based selection \and Integral R2 \and steady-state EMOA \and quality indicators}
 \end{abstract}
 
@@ -55,14 +55,13 @@ The hypervolume indicator is measured relative to a dominated, or dystopian, ref
 
 The classical R2 indicator is normally approximated with a finite set of weight vectors. This discretization makes evaluation simple and enables preference articulation, but it is only weakly Pareto compliant: a beneficial nondominated solution may fail to improve the indicator when no sampled weight vector exposes it~\cite{BrockhoffWagnerTrautmann2012,TrautmannWagnerBrockhoff2013}. Recent work returned to the continuous definition and showed that integrating a uniform continuum of weighted Tchebycheff utilities yields a Pareto-compliant unary indicator, together with exact algorithms in two objectives~\cite{SchaepermeierKerschke2025,JaszkiewiczZielniewicz2025}. Perspective mapping and box decomposition extend exact computation to three objectives in $O(n\log n)$ time and connect Integral R2 geometry to low-dimensional hypervolume algorithms without making Integral R2 itself a hypervolume indicator~\cite{Emmerich2026Perspective}.
 
-This paper asks a focused algorithmic question: \emph{what happens if the steady-state indicator-based selection principle of SMS-EMOA is retained, but hypervolume contribution is replaced by exact Integral R2 deletion loss?} The resulting method, called Integral R2 EMOA (IR2-EMOA), is intended for two- and three-objective optimization.
+This paper asks a focused algorithmic question: \emph{what happens if the steady-state indicator-based selection principle of SMS-EMOA is retained, but hypervolume contribution is replaced by exact IR2 contribution?} The resulting method, called Integral R2 EMOA (IR2-EMOA), is intended for two- and three-objective optimization. Its design is deliberately kept close to SMS-EMOA: each iteration creates one offspring, forms a $\mu+1$ candidate population, and selects a $\mu$-element survivor subset by deleting one solution, with nondominated rank as the primary criterion and indicator contribution as the secondary criterion in the worst front.
 
 Our contributions are:
 \begin{enumerate}
-    \item We formulate Integral R2 environmental selection with a positive deletion-loss convention suited to steady-state EMO.
-    \item We give exact all-deletion-loss computation for two objectives and a three-objective realization based on perspective mapping and weighted exclusive-box decomposition. The latter can reuse the combinatorial structure of low-dimensional hypervolume-contribution sweeps while replacing ordinary box volume by a closed-form weighted box integral.
-    \item We introduce IR2-EMOA, a deliberately simple steady-state EMOA based on nondominated sorting and deletion of the least important solution according to Integral R2.
-    \item We design a focused two- and three-objective study against SMS-EMOA and finite-weight R2-EMOA. Performance is assessed primarily by averaged Hausdorff distance and convergence; hypervolume is not used as the optimization target or principal evaluation metric.
+    \item We introduce IR2-EMOA as the direct Integral-R2 analogue of the steady-state SMS-EMOA design. Environmental selection maps a $\mu+1$ candidate set back to $\mu$ survivors and differs from the SMS-EMOA comparator only in the contribution indicator used within the worst nondominated front.
+    \item As a supporting computational contribution, we realize all IR2 contributions in three objectives using perspective mapping. The mapping converts the geometry to a hypervolume-analogue anchored-box decomposition and dimension sweep; the ordinary box volume is replaced by integration with the Jacobian weight induced by the perspective map. In two objectives we use the exact IR2 contribution method already established in the R2 v2 work of Sch\"apermeier and Kerschke~\cite{SchaepermeierKerschke2025}, and do not claim a new bi-objective contribution algorithm here.
+    \item We provide a reproducible six-problem diagnostic and benchmark setup for ZDT1--3 and DTLZ1, DTLZ2, and DTLZ7, with approximation quality assessed by Integral R2, hypervolume, and $\Delta_p$.
 \end{enumerate}
 
 \section{Background}
@@ -124,13 +123,13 @@ SMS-EMOA is a steady-state algorithm in which one offspring is generated and ins
 
 Trautmann, Wagner, and Brockhoff introduced R2-EMOA, which uses contribution to a unary, finite-weight R2 indicator as a secondary selection criterion~\cite{TrautmannWagnerBrockhoff2013}. It is the most important R2-based comparator for the present study because it isolates the distinction between a finite weight set and continuous integration. R2-IBEA follows a different design: it removes dominance ranking and uses a binary R2 indicator inside an IBEA-style fitness assignment~\cite{PhanSuzuki2013}. We therefore treat R2-IBEA as related work rather than as the main architectural comparator.
 
-\section{Integral R2 Deletion Losses}
+\section{IR2 Contributions}
 \label{sec:contributions}
 
-Because Integral R2 is minimized, it is useful to define contribution in terms of the positive loss caused by deletion rather than by directly copying the sign convention used for a maximized indicator such as hypervolume.
+Because Integral R2 is minimized, we define the IR2 contribution of a point as the positive increase of Integral R2 caused by deleting that point. This is the natural analogue of a hypervolume contribution for an indicator that is minimized.
 
-\begin{definition}[Integral R2 deletion loss]
-Let $P$ be a finite nondominated set with $|P|\ge2$ and $p\in P$. The Integral R2 deletion loss of $p$ is
+\begin{definition}[IR2 contribution]
+Let $P$ be a finite nondominated set with $|P|\ge2$ and $p\in P$. The IR2 contribution of $p$ is
 \begin{equation}
 \label{eq:deletion-loss}
     \cIR(p\mid P)
@@ -138,7 +137,7 @@ Let $P$ be a finite nondominated set with $|P|\ge2$ and $p\in P$. The Integral R
 \end{equation}
 \end{definition}
 
-By monotonicity, $\cIR(p\mid P)\ge0$. If deleting $p$ makes the set strictly worse in the set-dominance sense, Pareto compliance gives $\cIR(p\mid P)>0$. Duplicates and points redundant under the adopted dominance convention can have zero deletion loss and should be removed before contribution computation.
+By monotonicity, $\cIR(p\mid P)\ge0$. If deleting $p$ makes the set strictly worse in the set-dominance sense, Pareto compliance gives $\cIR(p\mid P)>0$. Duplicates and points redundant under the adopted dominance convention can have zero IR2 contribution and should be removed before contribution computation.
 
 The environmental selection rule of IR2-EMOA is therefore
 \begin{equation}
@@ -150,67 +149,7 @@ Ties are broken uniformly at random unless stated otherwise.
 \subsection{Two objectives}
 \label{subsec:2d}
 
-Let $P=\{p^{(1)},\ldots,p^{(n)}\}$ be sorted by increasing first coordinate; nondominance then implies decreasing second coordinate. Define the local segment integral
-\begin{equation}
-\label{eq:psi}
-\psi(a;[b,c])
-=\frac{a}{2}
-\left[
-\left(\frac{c}{a+c}\right)^2
--\left(\frac{b}{a+b}\right)^2
-\right],
-\end{equation}
-with $c/(a+c)=1$ for $c=\infty$ and with the boundary conventions $\psi(0;[b,c])=\psi(\infty;[b,c])=0$. The explicit $a=0$ convention is evaluated before the rational expression and avoids indeterminate $0/0$ forms at ideal-point boundary coordinates. The exact bi-objective decomposition of Sch\"apermeier and Kerschke~\cite{SchaepermeierKerschke2025} can be written as
-\begin{equation}
-\label{eq:ir2local}
-\IR(P)=\sum_{i=1}^{n}
-\left[
-\psi\!\left(p^{(i)}_1;[p^{(i)}_2,p^{(i-1)}_2]\right)
-+
-\psi\!\left(p^{(i)}_2;[p^{(i)}_1,p^{(i+1)}_1]\right)
-\right],
-\end{equation}
-where $p^{(0)}_2=p^{(n+1)}_1=\infty$.
-
-Deleting an interior point only joins its two adjacent staircase segments. With the positive convention~\eqref{eq:deletion-loss},
-\begin{align}
-\cIR(p^{(i)}\mid P)
-={}&
-\psi\!\left(p^{(i+1)}_1;[p^{(i)}_2,p^{(i-1)}_2]\right)
--
-\psi\!\left(p^{(i)}_1;[p^{(i)}_2,p^{(i-1)}_2]\right)
-\nonumber\\
-&+
-\psi\!\left(p^{(i-1)}_2;[p^{(i)}_1,p^{(i+1)}_1]\right)
--
-\psi\!\left(p^{(i)}_2;[p^{(i)}_1,p^{(i+1)}_1]\right),
-\label{eq:2dcontribution}
-\end{align}
-with the same zero- and infinite-boundary conventions. Consequently, after sorting and filtering, all $n$ deletion losses are obtained by one linear pass.
-
-\begin{proposition}
-For a set of $n$ bi-objective points, all Integral R2 deletion losses can be computed in $O(n\log n)$ time and $O(n)$ memory, including sorting and nondominance filtering. If a nondominated set is already stored in sorted order, the all-deletion-loss pass is $O(n)$.
-\end{proposition}
-
-\begin{proof}
-Sorting dominates the preprocessing cost. Equation~\eqref{eq:2dcontribution} depends only on a point and its immediate predecessor and successor. Each deletion loss therefore requires constant work after the sorted nondominated sequence has been constructed.
-\end{proof}
-
-\begin{algorithm}[t]
-\caption{All Integral R2 deletion losses in two objectives}
-\label{alg:all2d}
-\begin{algorithmic}[1]
-\Require Points $P$, ideal point $z^\star$
-\Ensure $\cIR(p\mid P)$ for every retained nondominated point
-\State translate $p\gets y-z^\star$; reject negative losses and merge duplicates
-\State sort by $p_1$ ascending and filter dominated points
-\For{$i=1,\ldots,n$}
-    \State obtain predecessor and successor, using $\infty$ at the two boundaries
-    \State evaluate Eq.~\eqref{eq:2dcontribution}
-\EndFor
-\State \Return all deletion losses
-\end{algorithmic}
-\end{algorithm}
+Exact bi-objective IR2 contributions are not derived again here. Sch\"apermeier and Kerschke already defined and computed the required least-contributor quantities in the R2 v2 work~\cite{SchaepermeierKerschke2025}. IR2-EMOA uses that contribution computation unchanged in two objectives. The new computational material below is therefore restricted to the three-objective case.
 
 \subsection{Three objectives: perspective mapping and weighted exclusive boxes}
 \label{subsec:3d}
@@ -226,17 +165,18 @@ For strictly positive $p\in\R^3_{>0}$ define its reciprocal corner in the usual 
 \end{equation}
 Thus, if a solution attains the ideal value in one objective, the corresponding reciprocal box is semi-infinite in that coordinate. This is the natural limiting convention $1/0:=+\infty$ and avoids perturbing extreme points away from the ideal boundary.
 
-The perspective mapping developed in~\cite{Emmerich2026Perspective} transforms the subgraph of the lower Tchebycheff envelope into the complement of a union of anchored boxes in reciprocal objective space. In three objectives the induced density is
+The perspective mapping developed in~\cite{Emmerich2026Perspective} transforms the subgraph of the lower Tchebycheff envelope into the complement of a union of anchored boxes in reciprocal objective space. It thereby permits a hypervolume-analogue box decomposition and dimension sweep. In three objectives, the absolute Jacobian determinant of the perspective map provides the weight
 \begin{equation}
 \label{eq:density}
-    \rho(x)=\frac{1}{(x_1+x_2+x_3)^4}.
+    \omega(x)=\left|\det D\Psi(x)\right|
+    =\frac{1}{(x_1+x_2+x_3)^4}.
 \end{equation}
-Because~\eqref{eq:ir2} uses the normalized uniform measure on the two-dimensional simplex, the corresponding weighted volume is multiplied by $(3-1)!=2$.
+We refer to $\omega$ as the \emph{Jacobian weight}. Because~\eqref{eq:ir2} uses the normalized uniform measure on the two-dimensional simplex, the corresponding weighted volume is multiplied by $(3-1)!=2$. Computing the three-dimensional IR2 contributions in this way is a supporting contribution of the present paper, not its main algorithmic contribution.
 
-For $|P|\ge2$, let $E_p$ be the region of the anchored reciprocal box of $b(p)$ that is not covered by the reciprocal boxes of any other point. Then the deletion loss is the weighted exclusive measure
+For $|P|\ge2$, let $E_p$ be the region of the anchored reciprocal box of $b(p)$ that is not covered by the reciprocal boxes of any other point. Then the IR2 contribution is the weighted exclusive measure
 \begin{equation}
 \label{eq:weighted-exclusive}
-    \cIR(p\mid P)=2\int_{E_p}\rho(x)\,\mathrm{d}x.
+    \cIR(p\mid P)=2\int_{E_p}\omega(x)\,\mathrm{d}x.
 \end{equation}
 This is the key bridge to low-dimensional contribution algorithms. The combinatorial decomposition into exclusive orthogonal boxes is independent of the measure used inside each box. Hence a contribution sweep that emits disjoint exclusive boxes can be reused by replacing ordinary volume with a weighted box primitive.
 
@@ -275,7 +215,7 @@ Equations~\eqref{eq:weighted-box}--\eqref{eq:weighted-box-node} also cover an ob
 The all-contributions algorithm of Emmerich and Fonseca computes all three-dimensional hypervolume contributions in $O(n\log n)$ time and $O(n)$ space~\cite{EmmerichFonseca2011}. The perspective result implies that its exclusive-region decomposition can be transported to Integral R2 by weighting the emitted boxes~\cite{Emmerich2026Perspective}. Our implementation follows the same sweep organization in reciprocal space and uses coordinate compression together with array-based predecessor/successor information; a Fenwick tree is used for active-rank queries, while path-compressed skip pointers avoid repeated traversal of deleted skyline nodes. The geometric ordering is unchanged; only the box accumulator is replaced by $2\mu(Q)$.
 
 \begin{algorithm}[t]
-\caption{Three-objective all-deletion-loss framework}
+\caption{Three-objective all-contribution framework}
 \label{alg:all3d}
 \begin{algorithmic}[1]
 \Require Nondominated loss vectors $P\subset\R^3_{\ge0}$
@@ -303,16 +243,19 @@ The target implementation preserves the $O(n\log n)$ sorting/sweep bound and $O(
 \section{Integral R2 EMOA}
 \label{sec:emoa}
 
-IR2-EMOA deliberately mirrors the steady-state structure of SMS-EMOA. Let $N$ be the population size. One offspring is created, evaluated, and inserted. Nondominated sorting identifies the worst front from which one point must be removed. If this front contains more than one point, exact Integral R2 deletion losses are calculated within that front and the point with the smallest deletion loss is discarded.
+IR2-EMOA deliberately mirrors the steady-state structure of SMS-EMOA. Let $\mu$ be the population size. One offspring is created, evaluated, and inserted, producing a $\mu+1$ candidate set. Environmental selection then chooses a $\mu$-element survivor subset by deleting exactly one solution. Nondominated sorting identifies the worst front from which this deletion must occur. If the worst front contains more than one point, exact IR2 contributions are calculated within that front and the point with the smallest IR2 contribution is discarded.
 
-The restriction to the worst front is inherited from the SMS-EMOA design principle: Pareto rank remains the primary criterion, while the indicator is used only to discriminate among solutions of equal rank. This avoids allowing an indicator value to preserve a dominated point at the expense of a nondominated one.
+The restriction to the worst front is inherited from the SMS-EMOA design principle: Pareto rank remains the primary criterion, while the indicator is used only to discriminate among solutions of equal rank. This avoids allowing an indicator value to preserve a dominated point at the expense of a nondominated one. Thus the proposed algorithm changes the set indicator used by SMS-EMOA while intentionally leaving the $\mu+1\rightarrow\mu$ steady-state architecture unchanged.
+
+\paragraph{Remark on $\mu+\lambda$ survivor selection.}
+A natural generational extension would create $\lambda>1$ offspring and then select an indicator-optimal $\mu$-subset from a $\mu+\lambda$ equal-rank candidate set. For Integral R2 this is a substantially harder optimization problem than the single-deletion step used here. In two objectives, exact fixed-cardinality Integral R2 subset selection can be realized efficiently by dynamic programming and Monge structure~\cite{Emmerich2026Subset2D}. In three objectives, however, exact fixed-cardinality Integral R2 subset selection is NP-hard~\cite{Emmerich2026Subset3D}. This complexity separation is an additional reason to retain the SMS-EMOA-style steady-state $\mu+1\rightarrow\mu$ design in the present three-objective algorithm.
 
 \begin{algorithm}[t]
 \caption{Integral R2 EMOA (IR2-EMOA)}
 \label{alg:ir2emoa}
 \begin{algorithmic}[1]
-\Require Population size $N$, evaluation budget $B$, ideal point $z^\star$
-\State initialize and evaluate population $P$ with $|P|=N$
+\Require Population size $\mu$, evaluation budget $B$, ideal point $z^\star$
+\State initialize and evaluate population $P$ with $|P|=\mu$
 \While{number of evaluations $<B$}
     \State select two parents by binary tournament
     \State create one offspring $x$ using SBX crossover and polynomial mutation
@@ -346,48 +289,29 @@ The study is intentionally restricted to the questions needed to evaluate IR2-EM
 
 The main comparison contains three methods:
 \begin{enumerate}
-    \item \textbf{IR2-EMOA}: the proposed steady-state algorithm with exact Integral R2 deletion losses;
+    \item \textbf{IR2-EMOA}: the proposed steady-state algorithm with exact IR2 contributions;
     \item \textbf{SMS-EMOA}: the same steady-state indicator-selection paradigm using hypervolume contribution~\cite{BeumeNaujoksEmmerich2007};
     \item \textbf{R2-EMOA}: the finite-weight-vector R2 algorithm of Trautmann, Wagner, and Brockhoff~\cite{TrautmannWagnerBrockhoff2013}.
 \end{enumerate}
-Where possible, variation operators, initialization, population sizes, and evaluation budgets are matched. For finite-weight R2-EMOA, the primary configuration uses $|W|=N$ uniformly distributed weights. \todo{Decide whether one larger finite-weight setting belongs in the main paper or supplementary material.}
+All three algorithms use identical initialization, binary-tournament mating selection, simulated binary crossover, polynomial mutation, population size, and evaluation budget. For each problem/run pair they start from the same initial population and use the same variation random seed. Finite-weight R2-EMOA uses 101 uniformly spaced weights in two objectives and the 120-vector simplex lattice in three objectives. The SMS-EMOA branch is the exact steady-state analogue of IR2-EMOA: only the secondary contribution calculation is exchanged. Its hypervolume reference point is placed 10\% beyond the coordinatewise nadir of the current worst nondominated front relative to that front's coordinate range; equivalently, after affine front normalization, the reference point is $(1.1,\ldots,1.1)$.
 
 R2-IBEA is discussed in related work but is not a main baseline because its binary-indicator fitness assignment removes dominance ranking and therefore tests a different algorithmic architecture~\cite{PhanSuzuki2013}.
 
 \subsection{Benchmark problems}
 
-The fixed benchmark family is DTLZ~\cite{DebThieleLaumannsZitzler2002}. We consider only two- and three-objective instances, with a compact selection designed to expose different front shapes and search difficulties. Candidate problems are DTLZ1, DTLZ2, DTLZ3, DTLZ4, and DTLZ7. \todo{Freeze the final subset after preliminary runtime tests; do not exceed the page budget with redundant instances.}
-
-A second, more recent benchmark suite will be selected jointly by the authors. \todo{Insert the second suite after the co-author decision.}
+The diagnostic and benchmark set contains six standard problems: ZDT1, ZDT2, and ZDT3 in two objectives, and DTLZ1, DTLZ2, and DTLZ7 in three objectives~\cite{DebThieleLaumannsZitzler2002}. To keep this first controlled benchmark inexpensive, the decision-space dimension is fixed to five for all six problems. This leaves the analytical Pareto fronts unchanged while reducing the number of distance variables in the search. Each run uses a population of $50$ and a budget of $10{,}000$ function evaluations. For performance assessment, each known Pareto front is represented by a deterministic reference set of $10{,}000$ points. The same reference sets are used by all methods and by all three reported performance indicators.
 
 \subsection{Performance measures}
 
-We deliberately do not use hypervolume as the principal performance measure. Hypervolume is the selection objective of SMS-EMOA and depends on a dystopian reference point; evaluating the new optimizer primarily by that same indicator would bias the comparison toward the architecture we are replacing.
+Approximation quality is assessed by three complementary set indicators: Integral R2, hypervolume (HV), and the standard averaged Hausdorff distance $\Delta_p$~\cite{SchuetzeEtAl2012}. Integral R2 is evaluated exactly with the benchmark's componentwise ideal point. For performance assessment, HV uses one fixed reference point per problem, obtained by shifting the sampled Pareto-front nadir outward by 10\% of the ideal-to-nadir range; this assessment reference is identical for all algorithms and should not be confused with the adaptive front-wise reference used internally by SMS-EMOA selection. For $\Delta_p$, each problem uses the same deterministic $10{,}000$-point Pareto-front reference set. We use $p=2$ throughout.
 
-Let $A$ be the final nondominated approximation and $P^\star$ a sufficiently dense reference set sampled from the known Pareto front. For a point $x$ and set $S$, let $d(x,S)=\min_{s\in S}\|x-s\|_2$. The $p$-averaged generational and inverted generational distances are
-\begin{align}
-    \mathrm{GD}_p(A,P^\star)
-    &=\left(\frac{1}{|A|}\sum_{a\in A}d(a,P^\star)^p\right)^{1/p},\\
-    \mathrm{IGD}_p(A,P^\star)
-    &=\left(\frac{1}{|P^\star|}\sum_{r\in P^\star}d(r,A)^p\right)^{1/p}.
-\end{align}
-The averaged Hausdorff distance is~\cite{SchuetzeEtAl2012}
-\begin{equation}
-    \DeltaP(A,P^\star)
-    =\max\{\mathrm{GD}_p(A,P^\star),\mathrm{IGD}_p(A,P^\star)\}.
-\end{equation}
-It measures both convergence and coverage and is our main set-quality measure. \todo{Fix $p$; $p=2$ is the current default candidate.}
+The three indicators emphasize different distribution properties. Integral R2 measures quality with respect to the continuous family of weighted Tchebycheff scalarizations; HV measures dominated objective-space volume relative to a fixed dystopian point; and $\Delta_p$ jointly reflects convergence and coverage. Reporting all three prevents the empirical assessment from being tied exclusively to either the IR2 selection criterion or the hypervolume selection criterion.
 
-For continuity with the original SMS-EMOA study, we additionally report the \emph{convergence measure}: the arithmetic mean of the Euclidean distance from every approximation point to the nearest point on the known Pareto front~\cite{BeumeNaujoksEmmerich2007},
-\begin{equation}
-    \operatorname{Conv}(A,P^\star)
-    =\frac{1}{|A|}\sum_{a\in A}d(a,P^\star).
-\end{equation}
-This measure isolates proximity to the front and deliberately does not quantify distribution. It is therefore complementary to $\Delta_p$.
+The six-panel ZDT/DTLZ gallery below is retained as a diagnostic visualization rather than as a substitute for quantitative benchmarking. Its purpose is to make the distribution induced by IR2-based environmental selection directly visible, including behavior at extreme points and on disconnected fronts.
 
 \subsection{Runtime experiment}
 
-The indicator-selection machinery is evaluated separately from optimization quality. For random nondominated point sets of increasing size $n$, we measure wall-clock time for all Integral R2 deletion losses in two and three objectives. The optimized implementation is checked against the brute-force reference
+The indicator-selection machinery is evaluated separately from optimization quality. For random nondominated point sets of increasing size $n$, we measure wall-clock time for all IR2 contributions in two and three objectives. The optimized implementation is checked against the brute-force reference
 \begin{equation}
     \cIR(p\mid P)=\IR(P\setminus\{p\})-\IR(P)
 \end{equation}
@@ -395,41 +319,57 @@ computed independently for every $p$. Tests include random fronts, nearly tied c
 
 \subsection{Statistical protocol}
 
-We plan \todo{30} independent runs per algorithm/problem combination. Results are summarized by medians and interquartile ranges. Pairwise comparisons use a nonparametric test and an effect-size statistic; if several comparisons are performed simultaneously, a multiple-comparison correction is applied. \todo{Freeze the exact statistical test before large-scale runs.}
+We use ten paired runs per algorithm/problem combination. Within each problem and run index, all three algorithms share the same initial population and variation random seed. The exact variation seeds and the corresponding initialization seeds are stored explicitly in \texttt{seeds.csv}; the initialization seed is the variation seed plus 17. Table~\ref{tab:benchmark10} reports the median together with the sample standard deviation (median $\pm$ SD) computed from the ten run-wise values. Complete run-wise results are provided with the paper. The present ten-run experiment is intended as a controlled benchmark rather than a definitive large-scale statistical comparison, so we do not attach significance claims to small differences.
 
 \section{Results}
 \label{sec:results}
 
-\subsection{Pilot software-verification study}
+\subsection{Ten-run ZDT/DTLZ benchmark}
 
-Before the final experimental campaign, we performed a small deterministic software-verification study to exercise the complete steady-state pipeline, including the ideal-boundary convention introduced above.  The pilot used DTLZ1 and DTLZ2 with two and three objectives, population size $30$, $500$ function evaluations, and three common-start runs per algorithm.  Finite-weight R2 used $101$ directions in two objectives and a simplex lattice of comparable size in three objectives.  For the SMS-style comparator, the current worst front was affinely normalized and evaluated with the fixed normalized dystopian reference point $(1.1,\ldots,1.1)$.  These settings are intentionally too small for publication-level conclusions; the purpose of the pilot is to verify the implementation and freeze the data pipeline before the planned larger study.
+Table~\ref{tab:benchmark10} reports median performance and sample standard deviation over ten paired runs for each of the three environmental-selection mechanisms. Every run uses five decision variables, population size $50$, and $10{,}000$ function evaluations. The table deliberately reports all three assessment indicators: exact Integral R2, HV, and $\Delta_p$. The complete run-wise values and exact paired seeds are supplied with the code; the standard deviations make unusually variable cases immediately visible.
 
 \begin{table}[t]
 \centering
-\caption{Pilot medians over three runs.  Entries are $\Delta_p$ / convergence; smaller is better.  These are software-verification results, not the final EMO 2027 benchmark.}
-\label{tab:pilot}
-\small
+\caption{Ten-run benchmark results as median $\pm$ sample standard deviation with five decision variables, population size $50$, and $10{,}000$ evaluations. Smaller is better for IR2 and $\Delta_p$; larger is better for HV. Exact paired seeds and all run-wise values are provided in the repository.}
+\label{tab:benchmark10}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{llccc}
 \toprule
-Problem & $m$ & IR2-EMOA & finite R2-EMOA & SMS-EMOA\\
+Problem & Algorithm & IR2 $\downarrow$ & HV $\uparrow$ & $\Delta_p\downarrow$\\
 \midrule
-DTLZ1 & 2 & $19.72/18.30$ & $37.34/23.99$ & $22.50/21.32$\\
-DTLZ1 & 3 & $56.89/46.53$ & $42.39/33.72$ & $81.16/61.50$\\
-DTLZ2 & 2 & $0.0906/0.0475$ & $0.0881/0.0460$ & $0.1005/0.0460$\\
-DTLZ2 & 3 & $0.2276/0.1542$ & $0.2189/0.1323$ & $0.1891/0.1235$\\
+ZDT1 & IR2-EMOA & $\mathbf{0.133342\pm4.22e-06}$ & $0.865733\pm0.000265$ & $0.011116\pm0.000522$\\
+ & finite R2-EMOA & $0.133398\pm1.43e-05$ & $0.865033\pm0.000317$ & $0.012377\pm0.000617$\\
+ & SMS-EMOA & $0.133517\pm2.56e-05$ & $\mathbf{0.867438\pm2.12e-05}$ & $\mathbf{0.008516\pm8.45e-05}$\\
+\addlinespace[1pt]
+ZDT2 & IR2-EMOA & $\mathbf{0.198800\pm3.49e-06}$ & $0.533803\pm0.000132$ & $0.014508\pm0.000656$\\
+ & finite R2-EMOA & $0.198893\pm1.24e-05$ & $0.533085\pm0.000261$ & $0.015656\pm0.001247$\\
+ & SMS-EMOA & $0.198820\pm8.92e-06$ & $\mathbf{0.534296\pm3.00e-05}$ & $\mathbf{0.011113\pm0.000343}$\\
+\addlinespace[1pt]
+ZDT3 & IR2-EMOA & $\mathbf{0.196016\pm0.013668}$ & $1.092857\pm0.009866$ & $0.015049\pm0.025889$\\
+ & finite R2-EMOA & $0.196056\pm0.013672$ & $1.092395\pm0.009974$ & $0.016551\pm0.027011$\\
+ & SMS-EMOA & $0.196108\pm1.87e-05$ & $\mathbf{1.094366\pm1.77e-05}$ & $\mathbf{0.012321\pm0.000426}$\\
+\addlinespace[1pt]
+DTLZ1 & IR2-EMOA & $\mathbf{0.033365\pm0.000179}$ & $0.133053\pm0.000623$ & $\mathbf{0.029741\pm0.000326}$\\
+ & finite R2-EMOA & $0.034492\pm0.000679$ & $0.128569\pm0.000860$ & $0.085245\pm0.063017$\\
+ & SMS-EMOA & $0.033834\pm0.000207$ & $\mathbf{0.137431\pm0.000233}$ & $0.031334\pm1.261365$\\
+\addlinespace[1pt]
+DTLZ2 & IR2-EMOA & $\mathbf{0.094891\pm6.70e-06}$ & $0.726085\pm0.000636$ & $0.090076\pm0.001392$\\
+ & finite R2-EMOA & $0.095394\pm4.63e-05$ & $0.692045\pm0.001923$ & $\mathbf{0.083892\pm0.001283}$\\
+ & SMS-EMOA & $0.094952\pm1.70e-05$ & $\mathbf{0.735302\pm0.000119}$ & $0.117048\pm0.001852$\\
+\addlinespace[1pt]
+DTLZ7 & IR2-EMOA & $0.458422\pm0.182414$ & $1.172993\pm0.106857$ & $0.520688\pm0.261109$\\
+ & finite R2-EMOA & $\mathbf{0.229395\pm0.200067}$ & $1.129139\pm0.062432$ & $0.246245\pm0.267430$\\
+ & SMS-EMOA & $0.233253\pm0.268388$ & $\mathbf{1.409654\pm0.211124}$ & $\mathbf{0.131598\pm0.428380}$\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The pilot already provides two useful implementation checks.  First, all three methods complete the same steady-state pipeline with comparable wall-clock cost at this small population size; median run times are about $2.1$--$2.3$ seconds in the present Python reference implementation.  Second, no algorithm dominates the others across these deliberately under-budgeted cases.  On DTLZ2, the three methods are close in two objectives, whereas the SMS-style comparator gives the smallest pilot $\Delta_p$ in three objectives.  The DTLZ1 values remain large and highly variable after only $500$ evaluations, confirming that the final benchmark needs a substantially larger evaluation budget before any search-quality conclusion is justified.  We therefore do not perform significance testing on these pilot data.
-
-The final study will replace this table by the preregistered larger-run results and will add the separate contribution-runtime experiment.  The pilot CSV files and scripts are retained in the accompanying repository so that every number in Table~\ref{tab:pilot} is reproducible.
-
-In addition to the pilot table, the repository now contains a reproducible set of exact-ideal single-shot visualizations for ZDT1, ZDT2, and ZDT3 in two objectives and for DTLZ1, DTLZ2, and DTLZ7 in three objectives.  These runs use population size $60$ and seed $2027$; ZDT1/2/3, DTLZ1, and DTLZ2 use $30{,}000$ function evaluations, whereas DTLZ7 uses $60{,}000$ evaluations in order to improve convergence on the disconnected front.  The three-objective plots use the fixed perspective projection employed in the earlier drafts (elevation $30^\circ$, azimuth $-60^\circ$), and the plotting order has been adjusted so that the true Pareto-front reference cloud is rendered as a light background layer while the IR2-EMOA approximation points remain visually in the foreground.  The corresponding objective vectors, metadata, and plotting scripts are included in the repository for exact reproduction.
+The results should be read as a comparison of selection-induced distributions rather than as evidence for a universally best indicator. By the median, IR2-EMOA gives the smallest IR2 on five of the six problems; the exception is DTLZ7, where finite R2-EMOA has the smallest median IR2. SMS-EMOA gives the largest median HV on all six problems. The cross-indicator picture is more varied: SMS-EMOA gives the smallest median $\Delta_p$ on the three ZDT problems and DTLZ7, IR2-EMOA on DTLZ1, and finite R2-EMOA on DTLZ2. The comparatively large standard deviations on ZDT3, DTLZ1, and especially DTLZ7 reveal occasional poorly converged outlying runs that the medians deliberately downweight. DTLZ7 remains under-converged at the common $10{,}000$-evaluation budget for several runs; this is consistent with the diagnostic gallery, for which we deliberately used a larger $60{,}000$-evaluation budget on DTLZ7. The ten-run experiment is therefore descriptive, and all individual run values and seeds are retained in the repository.
 
 \subsection{Single-shot gallery}
 
-Figure~\ref{fig:single-shot-gallery} collects the six current exact-ideal single-shot plots used to visually verify the implementation and the plotting pipeline.  The three ZDT cases are shown in two objectives, whereas DTLZ1, DTLZ2, and DTLZ7 are shown in three objectives.  All runs use a population size of $60$ and seed $2027$; the budget is $30{,}000$ evaluations except for DTLZ7, which uses $60{,}000$ evaluations.
+Figure~\ref{fig:single-shot-gallery} collects six exact-ideal single-shot plots as a diagnostic of the distribution properties induced by IR2-based selection.  The three ZDT cases are shown in two objectives, whereas DTLZ1, DTLZ2, and DTLZ7 are shown in three objectives.  All runs use a population size of $60$ and seed $2027$; the budget is $30{,}000$ evaluations except for DTLZ7, which uses $60{,}000$ evaluations.
 
 \begin{figure}[t]
 \centering
@@ -437,16 +377,16 @@ Figure~\ref{fig:single-shot-gallery} collects the six current exact-ideal single
 \renewcommand{\arraystretch}{1.0}
 \begin{tabular}{cc}
 \textbf{ZDT1 (2D), 30k evals} & \textbf{ZDT2 (2D), 30k evals}\\[-1mm]
-\includegraphics[width=0.48\linewidth]{figures/single_shot_zdt1_2d_exact_ideal_30000evals.png} &
-\includegraphics[width=0.48\linewidth]{figures/single_shot_zdt2_2d_exact_ideal_30000evals.png}\\[1mm]
+\includegraphics[width=0.45\linewidth]{single_shot_zdt1_2d_exact_ideal_30000evals.png} &
+\includegraphics[width=0.45\linewidth]{single_shot_zdt2_2d_exact_ideal_30000evals.png}\\[1mm]
 \textbf{ZDT3 (2D), 30k evals} & \textbf{DTLZ1 (3D), 30k evals}\\[-1mm]
-\includegraphics[width=0.48\linewidth]{figures/single_shot_zdt3_2d_exact_ideal_30000evals.png} &
-\includegraphics[width=0.48\linewidth]{figures/single_shot_dtlz1_3d_exact_ideal_30000evals.png}\\[1mm]
+\includegraphics[width=0.45\linewidth]{single_shot_zdt3_2d_exact_ideal_30000evals.png} &
+\includegraphics[width=0.45\linewidth]{single_shot_dtlz1_3d_exact_ideal_30000evals.png}\\[1mm]
 \textbf{DTLZ2 (3D), 30k evals} & \textbf{DTLZ7 (3D), 60k evals}\\[-1mm]
-\includegraphics[width=0.48\linewidth]{figures/single_shot_dtlz2_3d_exact_ideal_30000evals.png} &
-\includegraphics[width=0.48\linewidth]{figures/single_shot_dtlz7_3d_exact_ideal_60000evals.png}
+\includegraphics[width=0.45\linewidth]{single_shot_dtlz2_3d_exact_ideal_30000evals.png} &
+\includegraphics[width=0.45\linewidth]{single_shot_dtlz7_3d_exact_ideal_60000evals.png}
 \end{tabular}
-\caption{Gallery of reproducible exact-ideal single-shot IR2-EMOA runs.  The light gray point clouds indicate the sampled true Pareto front, the darker points indicate the final IR2-EMOA approximation set, and the star marks the exact ideal point used by Integral R2.  The corresponding objective vectors and metadata are included in the repository.}
+\caption{Diagnostic gallery of exact-ideal single-shot IR2-EMOA runs. Light gray points show the sampled Pareto front, dark points the final approximation, and the star the exact ideal point.}
 \label{fig:single-shot-gallery}
 \end{figure}
 
@@ -462,15 +402,21 @@ The scope has two deliberate limitations. First, only two and three objectives a
 \section{Conclusion}
 \label{sec:conclusion}
 
-We introduced Integral R2 EMOA (IR2-EMOA), a steady-state indicator-based EMOA that follows the selection structure of SMS-EMOA but uses exact Integral R2 deletion loss in place of hypervolume contribution. Integral R2 is a unary Pareto-compliant indicator obtained by integrating weighted Tchebycheff losses over a continuous weight simplex and is naturally referenced to an ideal/utopian point. In two objectives, deletion losses are local after sorting. In three objectives, perspective mapping transforms them into weighted exclusive orthogonal-box measures, enabling the reuse of efficient low-dimensional contribution sweeps with a different box integral. The resulting method provides a focused alternative to both hypervolume-based SMS-EMOA and finite-weight R2-EMOA for two- and three-objective optimization.
+We introduced Integral R2 EMOA (IR2-EMOA), a steady-state indicator-based EMOA that deliberately follows the $\mu+1\rightarrow\mu$ selection structure of SMS-EMOA but uses exact IR2 contribution in place of hypervolume contribution. Integral R2 is a unary Pareto-compliant indicator obtained by integrating weighted Tchebycheff losses over a continuous weight simplex and is naturally referenced to an ideal/utopian point. In two objectives, IR2-EMOA directly uses the contribution method already available from R2 v2. In three objectives, perspective mapping transforms IR2 contributions into weighted exclusive orthogonal-box measures, enabling the reuse of efficient low-dimensional contribution sweeps with a different box integral. The resulting method provides a focused alternative to both hypervolume-based SMS-EMOA and finite-weight R2-EMOA for two- and three-objective optimization.
 
-\todo{Replace the final paragraph with evidence-backed conclusions after experiments.}
+In the ten-run benchmark, IR2-EMOA attains the smallest median Integral R2 on five of the six problems, while SMS-EMOA attains the largest median hypervolume on all six. The $\Delta_p$ results are more mixed, with the best median values distributed across the three selection mechanisms. These results support the intended interpretation of IR2-EMOA as a distinct indicator-based selection principle with its own distributional bias, rather than as a uniformly superior replacement for hypervolume- or finite-weight R2-based selection.
 
-\subsubsection*{Code availability}
-The accompanying source package contains the 2-D/3-D Integral R2 deletion-loss implementation, IR2-EMOA, the benchmark and plotting scripts, and all seeds and single-shot result files used in the present draft.
+\subsubsection*{Open-source implementations and support material}
+The perspective-mapping implementation used as the computational basis for Integral R2 is publicly available at
+\url{https://github.com/emmerichmtm/IntegralR2ByPerspectiveMapping}.
+The supporting three-objective IR2 contribution calculator based on perspective mapping, hypervolume-analogue box decomposition, and dimension sweep is available at
+\url{https://github.com/emmerichmtm/IntegralR2ContributionCalculator}.
+The IR2-EMOA implementation and the scripts accompanying this paper are available at
+\url{https://github.com/emmerichmtm/Integral-R2-EMOA}.
+The source package accompanying the paper additionally contains the benchmark scripts, seeds, diagnostic gallery data, and the $10{,}000$-point Pareto reference sets used for Integral R2, HV, and $\Delta_p$ assessment.
 
 % Bibliography included directly for a single-file submission source.
-\begin{thebibliography}{10}
+\begin{thebibliography}{12}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{URL }
 \providecommand{\doi}[1]{https://doi.org/#1}
@@ -489,6 +435,14 @@ Brockhoff, D., Wagner, T., Trautmann, H.: On the properties of the {R2}
 Deb, K., Thiele, L., Laumanns, M., Zitzler, E.: Scalable multi-objective
   optimization test problems. In: Proceedings of the 2002 Congress on
   Evolutionary Computation. vol.~1, pp. 825--830. IEEE (2002)
+
+\bibitem{Emmerich2026Subset2D}
+Emmerich, M.T.M.: Exact and fast subset selection algorithms for the
+  bi-objective integral {R2} indicator. arXiv preprint arXiv:2606.23365 (2026)
+
+\bibitem{Emmerich2026Subset3D}
+Emmerich, M.T.M.: Three-objective integral {R2} subset selection: {NP}-hardness
+  and submodular approximation. arXiv preprint arXiv:2606.26591 (2026)
 
 \bibitem{Emmerich2026Perspective}
 Emmerich, M.T.M.: Computing the integral {R2} indicator by perspective mapping
